@@ -1,3 +1,4 @@
+const { EmbedBuilder } = require("discord.js");
 const { CardRarity } = require("@prisma/client");
 
 const rarityChances = [
@@ -54,6 +55,12 @@ module.exports = {
             await prisma.userCard.create({ data: { userId: user.id, cardId: card.id, quantity: 1 } });
         }
 
-        return message.reply(`🎉 You rolled **${rarity}** and got **${card.name}**!`);
+        const embed = new EmbedBuilder()
+            .setTitle(`🎉 You rolled ${rarity}!`)
+            .setDescription(`You got **${card.name}**`)
+            .setImage(card.imageUrl)
+            .setColor(0x00AE86);
+
+        return message.reply({ embeds: [embed] });
     }
 };
