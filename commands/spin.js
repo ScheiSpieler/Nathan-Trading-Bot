@@ -9,6 +9,14 @@ const rarityChances = [
     { rarity: CardRarity.OVERLORD, weight: 0.5 }
 ];
 
+const rarityColors = {
+    COMMON: 0xA0A0A0,
+    RARE: 0x3B82F6,
+    EPIC: 0x9333EA,
+    LEGENDARY: 0xF59E0B,
+    OVERLORD: 0xEF4444
+};
+
 function pickRarity() {
     const total = rarityChances.reduce((sum, r) => sum + r.weight, 0);
     const roll = Math.random() * total;
@@ -49,17 +57,35 @@ module.exports = {
         const card = cards[Math.floor(Math.random() * cards.length)];
         const existing = await prisma.userCard.findUnique({ where: { userId_cardId: { userId: user.id, cardId: card.id } } });
 
+        let quantity = 1;
+        let unlocked = false;
+
         if (existing) {
-            await prisma.userCard.update({ where: { userId_cardId: { userId: user.id, cardId: card.id } }, data: { quantity: { increment: 1 } } });
+            await prisma.userCard.update({
+                where: { userId_cardId: { userId: user.id, cardId: card.id } },
+                data: { quantity: { increment: 1 } }
+            });
+            quantity = existing.quantity + 1;
         } else {
             await prisma.userCard.create({ data: { userId: user.id, cardId: card.id, quantity: 1 } });
+            unlocked = true;
         }
 
+        const totalOwned = await prisma.userCard.aggregate({
+            where: { userId: user.id },
+            _sum: { quantity: true }
+        });
+
+        const totalCards = totalOwned._sum.quantity || 0;
+
         const embed = new EmbedBuilder()
-            .setTitle(`🎉 You rolled ${rarity}!`)
-            .setDescription(`You got **${card.name}**`)
+            .setTitle(`🎉 You rolled a ${rarity}!`)
+            .setDescription(unlocked
+                ? `You unlocked **${card.name}**!`
+                : `You already own **${card.name}** — now you have **x${quantity}**!`)
             .setImage(card.imageUrl)
-            .setColor(0x00AE86);
+            .setColor(rarityColors[rarity])
+            .setFooter({ text: `You now own ${totalCards} total cards` });
 
         return message.reply({ embeds: [embed] });
     }

@@ -89,7 +89,7 @@ module.exports = {
 
                     session.offer = cardData;
 
-                    await message.reply(`🎁 What **cards and quantities** do you want **from ${targetUser.username}**?\nFormat: \`Card Name | Quantity\`, separate multiple with commas.`);
+                    await message.reply("🎁 What **cards and quantities** do you want **from ${targetUser.username}**?\nFormat: `Card Name | Quantity`, separate multiple with commas.\nExample: `Cool Nathan | 2, Pixel Nathan | 1`");
 
                     const requestCollector = message.channel.createMessageCollector({ filter: m => m.author.id === senderId, max: 1, time: 60000 });
 
@@ -129,6 +129,7 @@ module.exports = {
                         );
 
                         const sent = await message.channel.send({ content: `${targetUser}`, embeds: [embed], components: [row] });
+                        let tradeCompleted = false;
                         const buttonCollector = sent.createMessageComponentCollector({ time: 30000 });
 
                         buttonCollector.on("collect", async interaction => {
@@ -136,6 +137,7 @@ module.exports = {
 
                             if (interaction.customId === "decline_trade") {
                                 tradeSessions.delete(senderId);
+                                tradeCompleted = true;
                                 return interaction.update({ content: "❌ Trade declined.", embeds: [], components: [] });
                             }
 
@@ -143,18 +145,30 @@ module.exports = {
                                                await validateUserCards(prisma, session.receiver.id, session.request);
                             if (!stillValid) {
                                 tradeSessions.delete(senderId);
+                                tradeCompleted = true;
                                 return interaction.update({ content: "❌ One or both users no longer have the required cards.", embeds: [], components: [] });
                             }
 
                             await applyTrade(prisma, session.sender.id, session.receiver.id, session.offer, session.request);
                             tradeSessions.delete(senderId);
+                            tradeCompleted = true;
 
-                            await interaction.update({ content: "✅ Trade complete!", embeds: [], components: [] });
+                            const resultEmbed = new EmbedBuilder()
+                                .setTitle("✅ Trade Completed!")
+                                .setDescription(
+                                    `${message.author} gave:\n${session.offer.map(e => `- ${e.quantity}x ${e.card.name}`).join("\n")}\n\n` +
+                                    `${targetUser} gave:\n${session.request.map(e => `- ${e.quantity}x ${e.card.name}`).join("\n")}`
+                                )
+                                .setColor(0x57F287);
+
+                            await interaction.update({ content: "🎉 Trade successful!", embeds: [resultEmbed], components: [] });
                         });
 
                         buttonCollector.on("end", () => {
-                            sent.edit({ content: "⌛ Trade request expired.", embeds: [], components: [] });
-                            tradeSessions.delete(senderId);
+                            if (!tradeCompleted) {
+                                sent.edit({ content: "⌛ Trade request expired.", embeds: [], components: [] });
+                                tradeSessions.delete(senderId);
+                            }
                         });
                     });
                 });
