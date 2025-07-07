@@ -1,0 +1,27 @@
+{
+  "name": "nathan-trading-cards-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@prisma/client": "^6.11.1",
+    "discord-webhook-node": "^1.1.8",
+    "discord.js": "^14.21.0",
+    "dotenv": "^8.2.0",
+    "klaw": "^3.0.0",
+    "mongoose": "^8.16.1",
+    "node.js": "^0.0.1-security",
+    "path": "^0.12.7",
+    "pg": "^8.16.3",
+    "request-promise-native": "^0.0.0",
+    "twit": "^1.1.20"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^6.11.1"
+  }
+}
