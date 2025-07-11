@@ -1,4 +1,4 @@
-// commands/rarestcards.js
+// commands/popularcards.js
 const { EmbedBuilder } = require("discord.js");
 const { CardRarity } = require("@prisma/client");
 
@@ -11,7 +11,7 @@ const rarityOrder = {
 };
 
 module.exports = {
-    name: "!rarestcards",
+    name: "!popularcards",
     execute: async (message, { prisma }) => {
         const args = message.content.split(" ").slice(1);
         const filterRarity = args[0]?.toUpperCase();
@@ -37,8 +37,8 @@ module.exports = {
 
         const sorted = cardQuantities
             .sort((a, b) => {
-                if (a.quantity !== b.quantity) return a.quantity - b.quantity;
-                return rarityOrder[a.rarity] - rarityOrder[b.rarity];
+                if (b.quantity !== a.quantity) return b.quantity - a.quantity;
+                return rarityOrder[b.rarity] - rarityOrder[a.rarity]; // COMMON wins tie
             })
             .slice(0, 10);
 
@@ -51,9 +51,9 @@ module.exports = {
         );
 
         const embed = new EmbedBuilder()
-            .setTitle(`🔍 Top 10 Rarest ${isValidRarity ? filterRarity : "Cards"}`)
+            .setTitle(`🔥 Top 10 Most Popular ${isValidRarity ? filterRarity : "Cards"}`)
             .setDescription(lines.join("\n"))
-            .setColor(0xbd10e0);
+            .setColor(0xf5a623);
 
         return message.reply({ embeds: [embed] });
     }

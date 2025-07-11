@@ -19,12 +19,14 @@ bot.once("ready", () => {
 const commands = [
     require("./commands/addcard"),
     require("./commands/book"),
+    require("./commands/canceltrade"),
     require("./commands/cardinfo"),
     require("./commands/cardlist"),
-    require("./commands/help"),
+    require("./commands/flex"),
     require("./commands/importcards"),
     require("./commands/inventory"),
     require("./commands/leaderboard"),
+    require("./commands/ntchelp"),
     require("./commands/rarestcards"),
     require("./commands/spin"),
     require("./commands/trade")
