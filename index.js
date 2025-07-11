@@ -23,6 +23,7 @@ const commands = [
     require("./commands/cardinfo"),
     require("./commands/cardlist"),
     require("./commands/completion"),
+    require("./commands/completionleaderboard"),
     require("./commands/flex"),
     require("./commands/importcards"),
     require("./commands/inventory"),
