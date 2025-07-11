@@ -1,4 +1,5 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { checkFirstFullCompletion } = require("../utils/completionCheck");
 
 async function validateUserCards(prisma, userId, cards) {
     for (const { card, quantity } of cards) {
@@ -162,6 +163,8 @@ module.exports = {
                                 .setColor(0x57F287);
 
                             await interaction.update({ content: "🎉 Trade successful!", embeds: [resultEmbed], components: [] });
+                            await checkFirstFullCompletion(prisma, message.author, message.client);
+                            await checkFirstFullCompletion(prisma, targetUser, message.client);
                         });
 
                         buttonCollector.on("end", () => {

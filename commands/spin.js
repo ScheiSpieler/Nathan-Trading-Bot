@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const { CardRarity } = require("@prisma/client");
+const { checkFirstFullCompletion } = require("../utils/completionCheck");
 
 const rarityChances = [
     { rarity: CardRarity.COMMON, weight: 61 },
@@ -86,7 +87,8 @@ module.exports = {
             .setImage(card.imageUrl)
             .setColor(rarityColors[rarity])
             .setFooter({ text: `You now own ${totalCards} total cards` });
-
+            
+        await checkFirstFullCompletion(prisma, user, message.client);
         return message.reply({ embeds: [embed] });
     }
 };

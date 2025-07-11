@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Meta {
+  key   String @id
+  value String
+}
+
 enum CardRarity {
   COMMON
   RARE
