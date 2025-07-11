@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const { CardRarity } = require("@prisma/client");
 
 module.exports = {
-    name: "!completionleaderboard",
+    name: "!completeleaderboard",
     execute: async (message, { prisma }) => {
         const args = message.content.split(" ").slice(1);
         const rarityFilter = args[0]?.toUpperCase();

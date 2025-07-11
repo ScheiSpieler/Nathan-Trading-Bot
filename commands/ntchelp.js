@@ -16,6 +16,7 @@ module.exports = {
                 { name: "🔁 !trade", value: "Start a trade with another user for any combination of cards." },
                 { name: "❌ !canceltrade", value: "Force-exit your current trade session if stuck." },
                 { name: "📈 !leaderboard [rarity] (optional)", value: "Top 10 collectors overall or filtered by a specific rarity." },
+                { name: "📊 !completeleaderboard [rarity] (optional)", value: "Top 10 users by collection completion rate." },
                 { name: "🕵️ !rarestcards [rarity] (optional)", value: "See the 10 least owned cards overall or by rarity." },
                 { name: "🔥 !popularcards [rarity] (optional)", value: "See the 10 most owned cards overall or by rarity." },
                 { name: "⚙️ !addcard <rarity>, <name>, <imageURL>", value: "(Admin only) Add a new card to the database." },
