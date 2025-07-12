@@ -21,11 +21,11 @@ enum CardRarity {
 }
 
 model Trade {
-  id          Int      @id @default(autoincrement())
+  id          BigInt      @id @default(autoincrement())
   sender      User     @relation("SentTrades", fields: [senderId], references: [id])
-  senderId    Int
+  senderId    BigInt
   receiver    User     @relation("ReceivedTrades", fields: [receiverId], references: [id])
-  receiverId  Int
+  receiverId  BigInt
   offered     Json     // Array of { cardId: number, quantity: number }
   requested   Json     // Array of { cardId: number, quantity: number }
   timestamp   DateTime @default(now())
