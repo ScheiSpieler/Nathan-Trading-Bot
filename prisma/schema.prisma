@@ -42,7 +42,6 @@ model User {
   receivedTrades  Trade[]    @relation("ReceivedTrades")
 }
 
-
 model Card {
   id        BigInt      @id @default(autoincrement())
   name      String
