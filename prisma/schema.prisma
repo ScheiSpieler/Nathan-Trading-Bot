@@ -37,8 +37,11 @@ model User {
   spinsLeft  Int        @default(3)
   lastSpin   BigInt
 
-  userCards  UserCard[]
+  userCards       UserCard[]
+  sentTrades      Trade[]    @relation("SentTrades")
+  receivedTrades  Trade[]    @relation("ReceivedTrades")
 }
+
 
 model Card {
   id        BigInt      @id @default(autoincrement())
