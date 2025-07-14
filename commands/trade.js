@@ -106,7 +106,8 @@ module.exports = {
             .map((s) => s.trim())
             .map((s) => {
               const [name, qtyStr] = s.split("|").map((t) => t.trim());
-              return { name, quantity: parseInt(qtyStr) };
+              // Lowercase card name for case-insensitive matching
+              return { name: name.toLowerCase(), quantity: parseInt(qtyStr) };
             });
 
           if (
@@ -123,7 +124,7 @@ module.exports = {
           const cardData = [];
           for (const offer of offerList) {
             const card = await prisma.card.findFirst({
-              where: { name: offer.name },
+              where: { name: { equals: offer.name, mode: "insensitive" } },
             });
             if (!card)
               return message.reply(
